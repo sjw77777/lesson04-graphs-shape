@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-
+import numpy as np
+import plotly.graph_objects as go
 DATA_URL = "https://raw.githubusercontent.com/happykth/data/main/kobis_movies.csv"
 
 st.set_page_config(
