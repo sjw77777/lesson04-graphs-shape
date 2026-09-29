@@ -712,3 +712,49 @@ else:
         key="sunburst_observation",
         label_visibility="collapsed",
     )
+    # 8번째 그래프: 10위권 체류 기간과 총 관객 수의 관계
+st.header("8. 나만의 질문 — 만들어서 분석하기")
+
+st.subheader("10위권에 오래 머문 영화는 총 관객도 많은가")
+
+# 필요한 데이터 정리
+scatter_df = df[["movieNm", "days_in_top10", "total_audi"]].copy()
+
+scatter_df["days_in_top10"] = pd.to_numeric(
+    scatter_df["days_in_top10"], errors="coerce"
+)
+scatter_df["total_audi"] = pd.to_numeric(
+    scatter_df["total_audi"], errors="coerce"
+)
+
+scatter_df = scatter_df.dropna(
+    subset=["movieNm", "days_in_top10", "total_audi"]
+)
+
+# 산점도 생성
+fig8 = px.scatter(
+    scatter_df,
+    x="days_in_top10",
+    y="total_audi",
+    hover_name="movieNm",
+    labels={
+        "days_in_top10": "10위권에 머문 날수",
+        "total_audi": "총 관객 수"
+    },
+    title="10위권에 오래 머문 영화는 총 관객도 많은가"
+)
+
+fig8.update_layout(
+    xaxis_title="10위권에 머문 날수",
+    yaxis_title="총 관객 수",
+    yaxis=dict(tickformat=",")
+)
+
+st.plotly_chart(fig8, use_container_width=True)
+
+st.markdown("### 이 그래프로 알 수 있는 것")
+st.write(
+    "산점도에서 점들이 오른쪽 위로 모이는 경향이 있다면 "
+    "10위권에 오래 머문 영화일수록 총 관객 수도 많은 경향이 있다고 "
+    "해석할 수 있다. 다만 그래프를 실제로 확인한 뒤 결과를 판단해야 한다."
+)
